@@ -1,0 +1,63 @@
+#Define the manifest mandatory option: type.
+type: install
+name: Hosteur S3 Bucket
+
+#Optional parameter. If id is not specified it will be generated automatically.
+id: s3-bucket
+
+#Defines the required name parameter
+
+
+#Optional parameter. It attaches manifest logo, that will be displayed in the Marketplace or installation window.
+logo: https://www.hosteur.com/src/templates/custom/images/business/stockage/bucket/platform5.png
+
+#Describe the nodeType the add-on may be installed on. The targetNodes method is used. It filters available nodes in the environment to fit the required nodeType.
+targetNodes:
+  nodeType: 
+    - vps
+    - vds
+    - storage
+    
+#The next optional description parameters, stated in lines 15-17, help users to figure out what is the add-on might be used for.
+description: 
+  text: Install Hosteur Bucket or any else S3 type bucket
+  short: Install Hosteur Bucket or any else S3 type bucket
+
+
+settings:
+  fields:
+  - type: string
+    name: urlBucket
+    caption: S3 URL
+    vtype: URL
+    required: true
+  - type: string
+    name: AccesKey
+    caption: Access Key
+    required: true    
+  - type: string
+    name: SecKey
+    caption: Security Key
+    required: true    
+  - type: string
+    name: mp
+    caption: Mount point
+    required: true     
+    
+
+onInstall:
+  installAddon:
+    id: s3_addon
+    
+addons:
+  - id: s3_addon
+    name: Custom Addon
+    onInstall:
+        - createDirectory:
+            path: ${settings.mp}
+        - cmd :
+            -yum update
+            -yum install install epel-release
+            -yum install s3fs-fuse
+        
+        
